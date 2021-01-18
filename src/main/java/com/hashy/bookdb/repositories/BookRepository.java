@@ -16,4 +16,5 @@ public interface BookRepository extends CrudRepository<Book,Long> {
     Set<Book> findByAuthor(Author author);
     Set<Book> findByGenre(Genre genre);
     Set<Book> findAllByOrderByIdAsc();
+    Set<Book> findTop10ByOrderByRatingDesc();
 }

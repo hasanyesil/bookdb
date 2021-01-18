@@ -7,4 +7,5 @@ import java.util.Set;
 public interface GenreService {
     Genre save(Genre genre);
     Set<Genre> findAll();
+    Genre findByType(String type);
 }

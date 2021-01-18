@@ -1,12 +1,18 @@
 package com.hashy.bookdb.bootstrap;
 
 import com.hashy.bookdb.domain.*;
+import com.hashy.bookdb.helpers.ImageHelper;
 import com.hashy.bookdb.services.*;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Random;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -32,15 +38,16 @@ public class DataLoader implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         for (int i = 1; i<30; i++) {
+
             Genre genre = new Genre();
-            genre.setId((long) i);
-            genre.setType("Test Genre" + i);
+            genre.setId((long) (i % 6 == 0 ? 1 : i % 6 ));
+            genre.setType("Test Genre" + (i % 6 == 0 ? 1 : i % 6));
 
 
             Book book = new Book();
             book.setId((long) i);
             book.setName("Test Book"+i);
-            book.setRating(4.3f);
+            book.setRating((new Random().nextInt(4)) + 1f);
             book.setIsbn("1111111");
             book.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit quis metus in fermentum. Nullam facilisis nisl at ligula commodo, sit amet venenatis lorem tempus. Aenean ac ex lorem. Donec ac sem a diam bibendum efficitur. Donec massa ligula, lobortis a quam quis, lacinia molestie odio. Donec fringilla dapibus dignissim. Pellentesque convallis tellus gravida, ultrices neque quis, tempus eros. Maecenas dolor nibh, maximus vitae massa at, scelerisque laoreet sem.");
 

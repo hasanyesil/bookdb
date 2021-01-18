@@ -27,4 +27,9 @@ public class GenreServiceImpl implements GenreService {
         genreRepository.findAll().forEach(genres::add);
         return genres;
     }
+
+    @Override
+    public Genre findByType(String type) {
+        return genreRepository.findByType(type);
+    }
 }

@@ -85,12 +85,12 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li class="active"><a th:href="@{/index}">Home</a></li>
-                <li><a th:href="@{/index(top=10)}">Top 10 books</a></li>
+                <li><a th:href="@{/top10}">Top 10 books</a></li>
                 <li><a href="#contact">Genre</a></li>
 
                 <li  class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >Genre <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
+                    <ul id="genre-drop" class="dropdown-menu">
                         <li><a th:href="@{/index}">All</a></li>
                         <li role="separator" class="divider">Genres</li>
                         <li><a th:href="@{/profile/booklist(type=reading)}">Reading</a></li>
@@ -121,5 +121,19 @@
         <th:block th:include="${template}"/>
     </div>
 </div>
+<script>
+    $(document).ready(function (){
+        $.ajax({
+            type : "GET",
+            url : "/check",
+            success : function (data){
+                $.each(data, function (index,name){
+                    let html = '<li><a href="../genre/'+name+'">' + name + '</a></li>';
+                    $('#genre-drop').append(html);
+                });
+            }
+        });
+    });
+</script>
 </body>
 </html>

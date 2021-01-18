@@ -17,4 +17,5 @@ public interface BookService{
     Set<Book> findAll();
     Set<Book> findByGenre(Genre genre);
     Book save(Book book);
+    Set<Book> findTop10();
 }

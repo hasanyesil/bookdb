@@ -33,7 +33,7 @@ public class BookController {
     @GetMapping("/book/{id}")
     public String getBook(@PathVariable("id") String id, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Book book = bookService.findById(Long.parseLong(id));
-        User currentUser = SessionHelper.getCurrentUser(request);
+        CurrentUser currentUser = SessionHelper.getCurrentUser(request);
         if(book == null){
             response.sendRedirect("/login");
             return null;
@@ -46,8 +46,8 @@ public class BookController {
 
     @PostMapping("/book/{id}/addcomment")
     public void newComment(@PathVariable("id") String bookId, @ModelAttribute("comment") Comment comment, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        User currentUser = SessionHelper.getCurrentUser(request);
-        if(currentUser == null){
+        CurrentUser user = SessionHelper.getCurrentUser(request);
+        if(user == null){
             response.sendRedirect("/index");
             return;
         }
@@ -56,6 +56,7 @@ public class BookController {
             return;
         }
         Book book = bookService.findById(Long.parseLong(bookId));
+        User currentUser = userService.findByUserId(user.getUserId());
 
         Comment comment1 = new Comment();
         comment1.setMessage(comment.getMessage());

@@ -53,4 +53,9 @@ public class BookServiceImpl implements BookService{
     public Book save(Book book) {
         return bookRepository.save(book);
     }
+
+    @Override
+    public Set<Book> findTop10() {
+        return bookRepository.findTop10ByOrderByRatingDesc();
+    }
 }

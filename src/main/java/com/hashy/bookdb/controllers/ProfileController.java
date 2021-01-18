@@ -1,5 +1,6 @@
 package com.hashy.bookdb.controllers;
 
+import com.hashy.bookdb.domain.CurrentUser;
 import com.hashy.bookdb.domain.User;
 import com.hashy.bookdb.helpers.SessionHelper;
 import com.hashy.bookdb.services.UserServiceImpl;
@@ -24,11 +25,11 @@ public class ProfileController {
 
     @GetMapping({"/","","/profile/profile"})
     public String getProfile(Model model, HttpServletRequest request){
-        User currentUser = SessionHelper.getCurrentUser(request);
+        CurrentUser currentUser = SessionHelper.getCurrentUser(request);
         if(currentUser == null)
             return "redirect:index";
 
-        User user = currentUser;
+        User user = userService.findByUserId(currentUser.getUserId());
         if(user == null){
             request.getSession().invalidate();
             return "redirect:login";
@@ -40,12 +41,12 @@ public class ProfileController {
 
     @PostMapping("updateprofile")
     public String update(@ModelAttribute("user") User user, HttpServletRequest request){
-        User oldUser = SessionHelper.getCurrentUser(request);
+        User oldUser = userService.findByUserId(SessionHelper.getCurrentUser(request).getUserId());
         user.setId(oldUser.getId());
         user.setBookLists(oldUser.getBookLists());
         user.setComments(oldUser.getComments());
         userService.saveUser(user);
         SessionHelper.setCurrentUser(request,user);
-        return "profile/profile";
+        return "redirect:/profile/";
     }
 }
