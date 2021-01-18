@@ -71,7 +71,7 @@
 </head>
 <body>
 <!-- Fixed navbar -->
-<nav class="navbar navbar-fixed-top">
+<nav class="navbar navbar-fixed-top" style="background-color: #9C9C9C">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -84,9 +84,20 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li class="active"><a th:href="@{/index}">Home</a></li>
+                <li><a th:href="@{/index(top=10)}">Top 10 books</a></li>
+                <li><a href="#contact">Genre</a></li>
+
+                <li  class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >Genre <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a th:href="@{/index}">All</a></li>
+                        <li role="separator" class="divider">Genres</li>
+                        <li><a th:href="@{/profile/booklist(type=reading)}">Reading</a></li>
+                        <li><a th:href="@{/profile/booklist(type=read)}">Read</a></li>
+                        <li><a th:href="@{/profile/booklist(type=willread)}">Will Read</a></li>
+                    </ul>
+                </li>
 
                 <li  class="dropdown" th:if="${user != null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >Profile <span class="caret"></span></a>
@@ -94,7 +105,7 @@
                         <li><a th:href="@{/profile}">Profile</a></li>
                         <li role="separator" class="divider"></li>
                         <li class="dropdown-header">Lists</li>
-                        <li><a th:href="@{/profile/booklist(type=reading)}">Reading</a></li>
+                        <li><a th:href="@{/profile/booklist(type=reading)}"></a></li>
                         <li><a th:href="@{/profile/booklist(type=read)}">Read</a></li>
                         <li><a th:href="@{/profile/booklist(type=willread)}">Will Read</a></li>
                     </ul>
@@ -105,7 +116,7 @@
     </div>
 </nav>
 
-<div class="container-fluid">
+<div class="container-fluid" style="margin-top: 100px">
     <div class="container xd-container">
         <th:block th:include="${template}"/>
     </div>

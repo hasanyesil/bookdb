@@ -6,16 +6,17 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Set;
 
+@Entity
 @Getter
 @Setter
-@Entity
-public class Genre {
+public class Publisher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String type;
 
-    @OneToMany(mappedBy = "genre")
+    private String name;
+
+    @OneToMany(mappedBy = "publisher")
     private Set<Book> books;
 }

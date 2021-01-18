@@ -1,4 +1,4 @@
-package com.hashy.bookdb.repositories;
+package com.hashy.bookdb.services;
 
 import com.hashy.bookdb.domain.Author;
 import com.hashy.bookdb.domain.Book;
@@ -7,13 +7,14 @@ import com.hashy.bookdb.domain.Genre;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
-public interface BookRepository extends CrudRepository<Book,Long> {
-
+public interface BookService{
     Set<Book> findByBookList(BookList bookList);
+    Book findById(Long id);
     Set<Book> findByAuthor(Author author);
+    Set<Book> findAll();
     Set<Book> findByGenre(Genre genre);
-    Set<Book> findAllByOrderByIdAsc();
+    Book save(Book book);
 }

@@ -1,10 +1,12 @@
 package com.hashy.bookdb.helpers;
 
 import com.hashy.bookdb.domain.CurrentUser;
+import com.hashy.bookdb.domain.Genre;
 import com.hashy.bookdb.domain.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Set;
 
 public class SessionHelper {
 

@@ -3,8 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            font-family: 'Roboto', sans-serif
+        }
+
+        .single_product {
+            padding-top: 66px;
+            padding-bottom: 140px;
+            background-color: #e5e5e5;
+            margin-top: 0px;
+            padding: 17px
+        }
+
+        .product_image_side {
+            background-color: #fff
+        }
+
+        .product_description {
+            padding: 15px
+        }
+
+        .product_name {
+            font-size: 22px
+        }
+
+        input {
+            display: none
+        }
+
+        .button {
+            display: inline-block;
+            position: relative;
+            width: 50px;
+            height: 50px;
+            margin: 10px;
+            cursor: pointer
+        }
+
+        .button span {
+            display: block;
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            padding: 0;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            border-radius: 100%;
+            background: #eeeeee;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+            transition: ease .3s
+        }
+
+        .button span:hover {
+            padding: 10px
+        }
+
+        .red .button span {
+            background: red
+        }
+
+        .silver .button span {
+            background: silver
+        }
+
+        .grey .button span {
+            background: grey
+        }
+
+        .blue .button span {
+            background: blue
+        }
+
+        .layer {
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: transparent;
+            z-index: -1
+        }
+
+        #bar {
+            width: 30%;
+            background-color: black;
+            margin: auto
+        }
+
+        #progress {
+            width: 1%;
+            height: 30px;
+            background-color: #fcec03;
+            line-height: 30px;
+            text-align: center
+        }
+    </style>
 </head>
 <body>
+<div class="single_product">
+    <div class="container-fluid">
+        <div class="product_image_side">
+            <div class="row">
+                <div class="col-md-5"> <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1585239277/Elite/Fiery_Red_690102.jpg" name="stage" width="400" height="400" />
 
+                </div>
+                <div class="col-md-7">
+                    <div class="product_description text-left">
+                        <div class="product_name"><h1 th:text="${book.name}"></h1></div>
+                        <div class="product-rating mt-1"><span class="badge badge-success" th:text="${book.rating + ' Star'}"><i class="fa fa-star"></i></span></div><br>
+                        <div class="mt-2"><span><b>Author: </b></span><span th:text="${book.author.name + ' ' + book.author.lastName}"></span></div><br>
+                        <div><span class="product_saved"><b>ISBN:</b> </span> <span class="emi_starts" th:text="${book.isbn}"></span> </div><br>
+                        <div><span class="product_saved"><b>Publisher:</b> </span> <span class="emi_starts" th:text="${book.publisher.name}"></span> </div><br>
+                        <div><b>Genre: </b><span class="car_color" th:text="${book.genre.type}"></span></div><br>
+                        <div><span class="product_saved"><b>Description:</b> </span><br> <span class="emi_starts" th:text="${book.description}"></span> </div><br>
+                        <div class="mt-1"> <button class="btn">Add To Read</button> <button class="btn">Add To Will Read</button> <button class="btn">Add To Reading</button> </div>
+                        <hr class="singleline">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container d-flex justify-content-center mt-100 mb-100">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Recent Comments</h3>
+                    <h5 class="card-subtitle">Latest Comments section by users</h5>
+                </div><br>
+                <div class="comment-widgets m-b-20">
+                    <div class="d-flex flex-row comment-row" th:each="comment : ${book.comments}">
+                        <div class="comment-text w-100">
+                            <h4 th:text="${comment.user.firstName + ' ' + comment.user.lastName}"></h4>
+                            <p class="m-b-5 m-t-10" th:text="${comment.message}">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it</p>
+                        </div><hr><br>
+                    </div>
+                    <div class="d-flex flex-row comment-row ">
+                        <div class="p-2"><span class="round"><img src="https://i.imgur.com/tT8rjKC.jpg" alt="user" width="50"></span></div>
+                        <div class="comment-text active w-100">
+                            <h5>Jonty Andrews</h5>
+                            <div class="comment-footer"> <span class="date">March 13, 2020</span> <span class="label label-success">Approved</span> <span class="action-icons active"> <a href="#" data-abc="true"><i class="fa fa-pencil"></i></a> <a href="#" data-abc="true"><i class="fa fa-rotate-right text-success"></i></a> <a href="#" data-abc="true"><i class="fa fa-heart text-danger"></i></a> </span> </div>
+                            <p class="m-b-5 m-t-10">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites</p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row comment-row">
+                        <div class="p-2"><span class="round"><img src="https://i.imgur.com/cAdLHeY.jpg" alt="user" width="50"></span></div>
+                        <div class="comment-text w-100">
+                            <h5>Sarah Tim</h5>
+                            <div class="comment-footer"> <span class="date">Jan 20, 2020</span> <span class="label label-danger">Rejected</span> <span class="action-icons"> <a href="#" data-abc="true"><i class="fa fa-pencil"></i></a> <a href="#" data-abc="true"><i class="fa fa-rotate-right"></i></a> <a href="#" data-abc="true"><i class="fa fa-heart"></i></a> </span> </div>
+                            <p class="m-b-5 m-t-10">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure</p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row comment-row">
+                        <div class="p-2"><span class="round"><img src="https://i.imgur.com/uIgDDDd.jpg" alt="user" width="50"></span></div>
+                        <div class="comment-text w-100">
+                            <h5>Samso Nagaro</h5>
+                            <div class="comment-footer"> <span class="date">March 20, 2020</span> <span class="label label-info">Pending</span> <span class="action-icons"> <a href="#" data-abc="true"><i class="fa fa-pencil"></i></a> <a href="#" data-abc="true"><i class="fa fa-rotate-right"></i></a> <a href="#" data-abc="true"><i class="fa fa-heart"></i></a> </span> </div>
+                            <p class="m-b-5 m-t-10">It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+</script>
 </body>
 </html>

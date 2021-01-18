@@ -20,11 +20,17 @@ public class Book {
     private String isbn;
     private Float rating;
 
+    @Lob
+    private String description;
+
+    @Lob
+    private byte[] pic;
+
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private Set<Comment> comments = new HashSet<>();
 
-    @OneToMany(mappedBy = "book")
-    private List<Genre> genres;
+    @ManyToOne
+    private Genre genre;
 
     @ManyToOne
     private Author author;
@@ -32,4 +38,6 @@ public class Book {
     @ManyToOne
     private BookList bookList;
 
+    @ManyToOne
+    private Publisher publisher;
 }

@@ -37,7 +37,7 @@ public class UserController {
         if(user == null){
             return "login";
         }
-        request.getSession().setAttribute("currentUser",new CurrentUser(user.getFirstName(), user.getId()));
+        request.getSession().setAttribute("currentUser",user);
         return "redirect:index";
     }
 
