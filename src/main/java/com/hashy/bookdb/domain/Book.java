@@ -26,7 +26,7 @@ public class Book {
     @Lob
     private byte[] pic;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Set<Comment> comments = new HashSet<>();
 
     @ManyToOne

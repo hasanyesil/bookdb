@@ -4,13 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
 @Entity
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,9 +22,9 @@ public class User {
     private String firstName;
     private String lastName;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user",fetch = FetchType.EAGER)
     private Set<BookList> bookLists = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user",fetch = FetchType.EAGER)
     private Set<Comment> comments = new HashSet<>();
 }
