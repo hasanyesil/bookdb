@@ -18,9 +18,12 @@ public class User {
 
     private String userName;
     private String passWord;
-    private String name;
+    private String firstName;
     private String lastName;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<BookList> bookLists = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<Comment> comments = new HashSet<>();
 }
