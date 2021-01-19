@@ -1,10 +1,8 @@
 package com.hashy.bookdb.controllers;
 
-import com.hashy.bookdb.domain.Book;
-import com.hashy.bookdb.domain.Comment;
-import com.hashy.bookdb.domain.CurrentUser;
-import com.hashy.bookdb.domain.User;
+import com.hashy.bookdb.domain.*;
 import com.hashy.bookdb.helpers.SessionHelper;
+import com.hashy.bookdb.services.BookListServiceImpl;
 import com.hashy.bookdb.services.BookServiceImpl;
 import com.hashy.bookdb.services.CommentServiceImpl;
 import com.hashy.bookdb.services.UserServiceImpl;
@@ -15,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 @Controller
@@ -23,11 +21,13 @@ public class BookController {
     private final BookServiceImpl bookService;
     private final UserServiceImpl userService;
     private final CommentServiceImpl commentService;
+    private final BookListServiceImpl bookListService;
 
-    public BookController(BookServiceImpl bookService, UserServiceImpl userService, CommentServiceImpl commentService) {
+    public BookController(BookServiceImpl bookService, UserServiceImpl userService, CommentServiceImpl commentService, BookListServiceImpl bookListService) {
         this.bookService = bookService;
         this.userService = userService;
         this.commentService = commentService;
+        this.bookListService = bookListService;
     }
 
     @GetMapping("/book/{id}")
@@ -67,5 +67,34 @@ public class BookController {
 
         bookService.save(book);
         response.sendRedirect("/book/" + bookId);
+    }
+
+    @PostMapping("/book/addtolist")
+    @ResponseBody
+    public String addToList(@RequestParam("id") String id, @RequestParam("type") String type, HttpServletRequest request){
+        CurrentUser currentUser = SessionHelper.getCurrentUser(request);
+        if(currentUser == null)
+            return "redirect:/login";
+        User user = userService.findByUserId(currentUser.getUserId());
+        Book book = bookService.findById(Long.parseLong(id));
+        ReadingStatus readingStatus;
+        switch (type.toUpperCase(Locale.ROOT)){
+            case "READ":
+                readingStatus = ReadingStatus.READ;
+                break;
+            case "READING":
+                readingStatus = ReadingStatus.READING;
+                break;
+            case "WILLREAD":
+                readingStatus = ReadingStatus.WANT_TO_READ;
+                break;
+            default:
+                readingStatus = null;
+                break;
+        }
+        BookList bookList = bookListService.findByUserAndReadingStatus(user,readingStatus);
+        bookList.getBooks().add(book);
+        user.getBookLists().add(bookList);
+        return "true";
     }
 }

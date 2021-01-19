@@ -92,9 +92,6 @@
                     <ul id="genre-drop" class="dropdown-menu">
                         <li><a th:href="@{/index}">All</a></li>
                         <li role="separator" class="divider">Genres</li>
-                        <li><a th:href="@{/profile/booklist(type=reading)}">Reading</a></li>
-                        <li><a th:href="@{/profile/booklist(type=read)}">Read</a></li>
-                        <li><a th:href="@{/profile/booklist(type=willread)}">Will Read</a></li>
                     </ul>
                 </li>
 
@@ -104,7 +101,7 @@
                         <li><a th:href="@{/profile}">Profile</a></li>
                         <li role="separator" class="divider"></li>
                         <li class="dropdown-header">Lists</li>
-                        <li><a th:href="@{/profile/booklist(type=reading)}"></a></li>
+                        <li><a th:href="@{/profile/booklist(type=reading)}">Reading</a></li>
                         <li><a th:href="@{/profile/booklist(type=read)}">Read</a></li>
                         <li><a th:href="@{/profile/booklist(type=willread)}">Will Read</a></li>
                     </ul>

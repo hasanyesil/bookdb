@@ -163,7 +163,7 @@
                         <div><span class="product_saved"><b>Publisher:</b> </span> <span class="emi_starts" th:text="${book.publisher.name}"></span> </div><br>
                         <div><b>Genre: </b><span class="car_color" th:text="${book.genre.type}"></span></div><br>
                         <div><span class="product_saved"><b>Description:</b> </span><br> <span class="emi_starts" th:text="${book.description}"></span> </div><br>
-                        <div class="mt-1"> <button class="btn">Add To Read</button> <button class="btn">Add To Will Read</button> <button class="btn">Add To Reading</button> </div>
+                        <div class="mt-1"> <button class="btn" onclick="addToList('read')">Add To Read</button> <button class="btn" onclick="addToList('willread')">Add To Will Read</button> <button class="btn" onclick="addToList('reading')">Add To Reading</button> </div>
                         <hr class="singleline">
                     </div>
                 </div>
@@ -219,7 +219,7 @@
 -->
 <div class="container">
     <div class="post-comments">
-
+        <input id="hdnbookid" type="hidden" th:value="${book.id}">
         <form th:action="@{${book.id} + '/addcomment'}" th:object="${comment}" method="post">
             <div class="form-group">
                 <label for="comment">Your Comment</label>
@@ -249,6 +249,16 @@
     </div>
 </div>
 <script>
+    function addToList(listType){
+        $.ajax({
+            type: "POST",
+            url : "/book/addToList",
+            data : {"id" : $('#hdnbookid').val(), "type" : listType},
+            success: function (data){
+
+            }
+        });
+    }
 </script>
 </body>
 </html>
