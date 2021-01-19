@@ -26,4 +26,9 @@ public class BookListServiceImpl implements BookListService{
     public BookList findByUserAndReadingStatus(User user, ReadingStatus readingStatus) {
         return bookListRepository.findByUserAndReadingStatus(user,readingStatus).orElse(null);
     }
+
+    @Override
+    public Set<BookList> findByReadingStatus(ReadingStatus readingStatus) {
+        return bookListRepository.findByReadingStatus(readingStatus);
+    }
 }

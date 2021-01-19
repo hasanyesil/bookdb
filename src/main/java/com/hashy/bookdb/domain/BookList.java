@@ -19,10 +19,13 @@ public class BookList {
     @Enumerated(EnumType.STRING)
     private ReadingStatus readingStatus;
 
-    @ManyToMany
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
     @JoinTable(
-            name = "book_booklists",
-            joinColumns = @JoinColumn(name = "booklist_id"),
+            name = "book_booklist",
+            joinColumns = @JoinColumn(name = "book_list_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
     private Set<Book> books = new HashSet<>();

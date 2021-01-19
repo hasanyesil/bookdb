@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
@@ -69,14 +71,14 @@ public class BookController {
         response.sendRedirect("/book/" + bookId);
     }
 
-    @PostMapping("/book/addtolist")
+    @GetMapping("/book/{id}/addtolist")
     @ResponseBody
-    public String addToList(@RequestParam("id") String id, @RequestParam("type") String type, HttpServletRequest request){
+    public String addToList(@PathVariable("id") int id, @RequestParam("type") String type, HttpServletRequest request){
         CurrentUser currentUser = SessionHelper.getCurrentUser(request);
         if(currentUser == null)
             return "redirect:/login";
         User user = userService.findByUserId(currentUser.getUserId());
-        Book book = bookService.findById(Long.parseLong(id));
+        Book book = bookService.findById((long)id);
         ReadingStatus readingStatus;
         switch (type.toUpperCase(Locale.ROOT)){
             case "READ":
@@ -93,8 +95,19 @@ public class BookController {
                 break;
         }
         BookList bookList = bookListService.findByUserAndReadingStatus(user,readingStatus);
-        bookList.getBooks().add(book);
-        user.getBookLists().add(bookList);
-        return "true";
+        if(bookList == null) {
+            bookList = new BookList();
+            bookList.setUser(user);
+            bookList.setBooks(new HashSet<>(Arrays.asList(book)));
+            bookList.setReadingStatus(readingStatus);
+            book.getBookLists().add(bookListService.save(bookList));
+            bookService.save(book);
+        }else{
+            book.getBookLists().add(bookList);
+            bookList.getBooks().add(book);
+            bookService.save(book);
+            bookListService.save(bookList);
+        }
+        return type;
     }
 }

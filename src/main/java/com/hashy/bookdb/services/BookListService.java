@@ -9,4 +9,5 @@ import java.util.Set;
 public interface BookListService {
     BookList save(BookList bookList);
     BookList findByUserAndReadingStatus(User user, ReadingStatus readingStatus);
+    Set<BookList> findByReadingStatus(ReadingStatus readingStatus);
 }

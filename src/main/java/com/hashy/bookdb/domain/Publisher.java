@@ -17,6 +17,6 @@ public class Publisher {
 
     private String name;
 
-    @OneToMany(mappedBy = "publisher")
+    @OneToMany(mappedBy = "publisher", fetch = FetchType.EAGER)
     private Set<Book> books;
 }
