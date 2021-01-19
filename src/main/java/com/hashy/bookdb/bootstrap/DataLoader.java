@@ -1,15 +1,11 @@
 package com.hashy.bookdb.bootstrap;
 
 import com.hashy.bookdb.domain.*;
-import com.hashy.bookdb.helpers.ImageHelper;
 import com.hashy.bookdb.services.*;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
@@ -23,14 +19,16 @@ public class DataLoader implements CommandLineRunner {
     private final GenreServiceImpl genreService;
     private final PublisherServiceImpl publisherService;
     private final CommentServiceImpl commentService;
+    private final BookListServiceImpl bookListService;
 
-    public DataLoader(UserServiceImpl userService, BookServiceImpl bookService, AuthorServiceImpl authorService, GenreServiceImpl genreService, PublisherServiceImpl publisherService, CommentServiceImpl commentService) {
+    public DataLoader(UserServiceImpl userService, BookServiceImpl bookService, AuthorServiceImpl authorService, GenreServiceImpl genreService, PublisherServiceImpl publisherService, CommentServiceImpl commentService, BookListServiceImpl bookListService) {
         this.userService = userService;
         this.bookService = bookService;
         this.authorService = authorService;
         this.genreService = genreService;
         this.publisherService = publisherService;
         this.commentService = commentService;
+        this.bookListService = bookListService;
     }
 
 
@@ -50,6 +48,20 @@ public class DataLoader implements CommandLineRunner {
             book.setRating((new Random().nextInt(4)) + 1f);
             book.setIsbn("1111111");
             book.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit quis metus in fermentum. Nullam facilisis nisl at ligula commodo, sit amet venenatis lorem tempus. Aenean ac ex lorem. Donec ac sem a diam bibendum efficitur. Donec massa ligula, lobortis a quam quis, lacinia molestie odio. Donec fringilla dapibus dignissim. Pellentesque convallis tellus gravida, ultrices neque quis, tempus eros. Maecenas dolor nibh, maximus vitae massa at, scelerisque laoreet sem.");
+
+            BookList booklist = new BookList();
+            booklist.setId((long) i);
+            switch (i%3){
+                case 0:
+                    booklist.setReadingStatus(ReadingStatus.READ);
+                    break;
+                case 1:
+                    booklist.setReadingStatus(ReadingStatus.WANT_TO_READ);
+                    break;
+                case 2:
+                    booklist.setReadingStatus(ReadingStatus.READING);
+                    break;
+            }
 
             Comment comment = new Comment();
             comment.setId((long) i);
@@ -76,8 +88,12 @@ public class DataLoader implements CommandLineRunner {
 
             authorService.save(author);
             genreService.save(genre);
+
             book.setGenre(genre);
             bookService.save(book);
+
+            booklist.setBooks(new HashSet<>(Arrays.asList(book)));
+
             comment.setBook(book);
             commentService.save(comment);
             book.setComments(new HashSet<>(Arrays.asList(comment)));
@@ -91,6 +107,15 @@ public class DataLoader implements CommandLineRunner {
             authorService.save(author);
             user.setComments(new HashSet<>(Arrays.asList(comment)));
             userService.saveUser(user);
+            booklist.setUser(user);
+
+            bookListService.save(booklist);
+            user.setBookLists(new HashSet<>(Arrays.asList(booklist)));
+            userService.saveUser(user);
+
+            book.setBookLists(new HashSet<>(Arrays.asList(booklist)));
+            bookService.save(book);
+
             comment.setUser(user);
             commentService.save(comment);
         }

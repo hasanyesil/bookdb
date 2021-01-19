@@ -35,8 +35,8 @@ public class Book {
     @ManyToOne
     private Author author;
 
-    @ManyToOne
-    private BookList bookList;
+    @ManyToMany(mappedBy = "books")
+    private Set<BookList> bookLists;
 
     @ManyToOne
     private Publisher publisher;

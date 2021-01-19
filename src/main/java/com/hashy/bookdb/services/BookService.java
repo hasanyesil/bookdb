@@ -11,7 +11,6 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface BookService{
-    Set<Book> findByBookList(BookList bookList);
     Book findById(Long id);
     Set<Book> findByAuthor(Author author);
     Set<Book> findAll();

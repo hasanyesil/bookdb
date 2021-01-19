@@ -21,11 +21,6 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public Set<Book> findByBookList(BookList bookList) {
-        return bookRepository.findByBookList(bookList);
-    }
-
-    @Override
     public Book findById(Long id) {
         return bookRepository.findById(id).orElse(null);
     }

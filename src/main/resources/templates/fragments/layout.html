@@ -98,7 +98,7 @@
                     </ul>
                 </li>
 
-                <li  class="dropdown" th:if="${user != null}">
+                <li  class="dropdown" th:if="${session.currentUser != null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >Profile <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a th:href="@{/profile}">Profile</a></li>
@@ -109,7 +109,7 @@
                         <li><a th:href="@{/profile/booklist(type=willread)}">Will Read</a></li>
                     </ul>
                 </li>
-                <li th:if="${user == null}"><a th:href="@{/login}">Login</a></li>
+                <li th:if="${session.currentUser == null}"><a th:href="@{/login}">Login</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

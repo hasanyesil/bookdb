@@ -19,7 +19,12 @@ public class BookList {
     @Enumerated(EnumType.STRING)
     private ReadingStatus readingStatus;
 
-    @OneToMany(mappedBy = "bookList")
+    @ManyToMany
+    @JoinTable(
+            name = "book_booklists",
+            joinColumns = @JoinColumn(name = "booklist_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
     private Set<Book> books = new HashSet<>();
 
     @ManyToOne
