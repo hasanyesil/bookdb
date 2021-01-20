@@ -1,4 +1,4 @@
-spring:
+spring:spring.jpa.properties.javax.persistence.schema-generation.scripts.action
   datasource:
     url: jdbc:mysql://localhost:3306/bookdb
     username: root
