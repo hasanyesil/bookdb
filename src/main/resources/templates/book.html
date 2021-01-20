@@ -152,7 +152,7 @@
         <div class="product_image_side">
             <div class="row">
                 <div class="col-md-5"> <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0KR_nBEaJHOOo5S_zX1uE0cS_vkwMqg5B8w&usqp=CAU" name="stage" width="400" height="400" />
-
+                    <input id="hdnbookid" type="hidden" th:value="${book.id}">
                 </div>
                 <div class="col-md-7">
                     <div class="product_description text-left">
@@ -163,7 +163,10 @@
                         <div><span class="product_saved"><b>Publisher:</b> </span> <span class="emi_starts" th:text="${book.publisher.name}"></span> </div><br>
                         <div><b>Genre: </b><span class="car_color" th:text="${book.genre.type}"></span></div><br>
                         <div><span class="product_saved"><b>Description:</b> </span><br> <span class="emi_starts" th:text="${book.description}"></span> </div><br>
-                        <div class="mt-1"> <button id="readBtn" class="btn" onclick="addToList('read')">Add To Read</button> <button id="willreadBtn" class="btn" onclick="addToList('willread')">Add To Will Read</button> <button id="readingBtn" class="btn" onclick="addToList('reading')">Add To Reading</button> </div>
+                        <div class="form-check form-check-inline">
+
+                        </div>
+                        <div class="mt-1"> <button id="readBtn" class="btn" onclick="addToList(this,'read')">Add To Read</button> <button id="willreadBtn" class="btn" onclick="addToList(this,'willread')">Add To Will Read</button> <button id="readingBtn" class="btn" onclick="addToList(this,'reading')">Add To Reading</button> </div>
                         <hr class="singleline">
                     </div>
                 </div>
@@ -217,6 +220,27 @@
     </div>
 </div>
 -->
+<div class="container mt-5" style="margin-bottom: 100px">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-7">
+            <div class="shadow p-3 bg-white rounded" id="commentParent">
+                <div class="mt-5 d-flex flex-row"> <img src="https://w7.pngwing.com/pngs/148/892/png-transparent-computer-icons-user-symbol-light-client-icon-service-computer-orange-thumbnail.png" width="40" height="40">
+                    <div class="w-100 ml-2 comment-area"> <textarea id="messageTextArea" class="form-control"></textarea>
+                        <button class="btn btn-secondary btn-block mt-2 post-btn" onclick="postComment()">Post</button> </div>
+                </div>
+                <div class="d-flex flex-row mt-4" th:each="comment : ${book.comments}"> <img src="https://w7.pngwing.com/pngs/148/892/png-transparent-computer-icons-user-symbol-light-client-icon-service-computer-orange-thumbnail.png" width="40" height="40">
+                    <div class="ml-2 w-100">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-row align-items-center"> <span class="font-weight-bold name" th:text="${comment.user.firstName + ' ' + comment.user.lastName}"><i class="fa fa-heart"></i></span> <span class="dots"></span> </div><i class="fa fa-star"></i></span>
+                        </div>
+                        <p class="user-comment-text text-justify" th:text="${comment.message}">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--
 <div class="container">
     <div class="post-comments">
         <input id="hdnbookid" type="hidden" th:value="${book.id}">
@@ -230,46 +254,138 @@
 
         <div class="row">
             <div class="media" th:each="comment : ${book.comments}">
-                <!-- first comment -->
                 <div class="media-heading">
                     <button class="btn btn-default btn-xs" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseExample"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button> <span class="label label-info" th:text="${comment.user.firstName + ' ' + comment.user.lastName}">User</span>
                 </div>
                     <div class="media-body">
                         <p th:text="${comment.message}"></p>
-                        <!-- comment-meta -->
 
                            </div>
-                            <!-- comments -->
 
             </div>
-                        <!-- answer to the first comment -->
 
                     </div>
         </div>
     </div>
+-->
 </div>
 <script>
-    function addToList(listType){
+
+    $(document).ready(function() {
+       $.ajax({
+           type: "GET",
+           url: "/book/"+$('#hdnbookid').val()+"/getlistdata",
+           success: function (data){
+               if(data != null){
+                   switch (data){
+                       case "read":
+                           $('#readBtn').html("# Read added #");
+                           $('#readBtn').addClass("btn-primary");
+                           $('#willreadBtn').prop('disabled',true);
+                           $('#readingBtn').prop('disabled',true);
+                           break;
+                       case "willread":
+                           $('#willreadBtn').html("# Will Read added #");
+                           $('#willreadBtn').addClass("btn-primary");
+                           $('#readingBtn').prop('disabled',true);
+                           $('#readBtn').prop('disabled',true);
+                           break;
+                       case "reading":
+                           $('#readingBtn').html("# Reading added #");
+                           $('#readingBtn').addClass("btn-primary");
+                           $('#willreadBtn').prop('disabled',true);
+                           $('#readBtn').prop('disabled',true);
+                           break;
+                   }
+               }
+           }
+       })
+    });
+
+    function postComment(){
         $.ajax({
             type: "GET",
-            url : "/book/"+$('#hdnbookid').val()+"/addtolist",
-            data : {"type" : listType},
+            url: "/book/" + $('#hdnbookid').val() + "/addcomment",
+            data: {"message" : $('#messageTextArea').val()},
             success: function (data){
                 if (data != null){
-                    switch (data){
-                        case "read":
-                            $('#readBtn').html("# Read added #");
-                            break;
-                        case "willread":
-                            $('#willreadBtn').html("# Will Read added #");
-                            break;
-                        case "reading":
-                            $('#readingBtn').html("# Reading added #");
-                            break;
-                    }
+                    let arr = data.split(',');
+                    let row = '<div class="d-flex flex-row mt-4"> <img src="https://w7.pngwing.com/pngs/148/892/png-transparent-computer-icons-user-symbol-light-client-icon-service-computer-orange-thumbnail.png" width="40" height="40">\n' +
+                        '                    <div class="ml-2 w-100">\n' +
+                        '                        <div class="d-flex justify-content-between align-items-center">\n' +
+                        '                            <div class="d-flex flex-row align-items-center"> <span class="font-weight-bold name">'+ arr[0] +'<i class="fa fa-heart"></i></span> <span class="dots"></span> </div><i class="fa fa-star"></i></span>\n' +
+                        '                        </div>\n' +
+                        '                        <p class="user-comment-text text-justify">'+arr[1]+'</p>\n' +
+                        '                    </div>\n' +
+                        '                </div>';
+                    $('#commentParent').append(row);
+                    $('#messageTextArea').val("");
                 }
             }
         });
+    }
+
+    function addToList(listBtn,listType){
+        if(listBtn.innerText.includes("#")){
+            $.ajax({
+                type: "GET",
+                url: "/book/" + $('#hdnbookid').val() + "/removefromlist",
+                success:function (data){
+                    debugger;
+                    $(listBtn).removeClass("btn-primary");
+                    switch (listType){
+                        case "read":
+                            $("#readBtn").html("Add To Read");
+                            $("#willreadBtn").prop('disabled',false);
+                            $("#readingBtn").prop('disabled',false);
+                            break;
+                        case "willread":
+                            $("#willreadBtn").html("Add To Will Read");
+                            $("#readingBtn").prop('disabled',false);
+                            $("#readBtn").prop('disabled',false);
+                            break;
+                        case "reading":
+                            $("#readingBtn").html("Add To Reading");
+                            $("#readBtn").prop('disabled',false);
+                            $("#willreadBtn").prop('disabled',false);
+                    }
+                }
+            });
+        }else {
+            $.ajax({
+                type: "GET",
+                url: "/book/" + $('#hdnbookid').val() + "/addtolist",
+                data: {"type": listType},
+                success: function (data) {
+                    if (data != null) {
+                        if(data === ""){
+                            alert("Please login to add book to lists.");
+                            return;
+                        }
+                        switch (data) {
+                            case "read":
+                                $('#readBtn').html("# Read added #");
+                                $('#readBtn').addClass("btn-primary");
+                                $('#willreadBtn').prop('disabled', true);
+                                $('#readingBtn').prop('disabled', true);
+                                break;
+                            case "willread":
+                                $('#willreadBtn').html("# Will Read added #");
+                                $('#willreadBtn').addClass("btn-primary");
+                                $('#readingBtn').prop('disabled', true);
+                                $('#readBtn').prop('disabled', true);
+                                break;
+                            case "reading":
+                                $('#readingBtn').html("# Reading added #");
+                                $('#readingBtn').addClass("btn-primary");
+                                $('#willreadBtn').prop('disabled', true);
+                                $('#readBtn').prop('disabled', true);
+                                break;
+                        }
+                    }
+                }
+            });
+        }
     }
 </script>
 </body>

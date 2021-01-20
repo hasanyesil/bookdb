@@ -1,5 +1,8 @@
 package com.hashy.bookdb.controllers;
 
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.hashy.bookdb.domain.*;
 import com.hashy.bookdb.helpers.SessionHelper;
 import com.hashy.bookdb.services.BookListServiceImpl;
@@ -33,8 +36,8 @@ public class BookController {
     }
 
     @GetMapping("/book/{id}")
-    public String getBook(@PathVariable("id") String id, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Book book = bookService.findById(Long.parseLong(id));
+    public String getBook(@PathVariable("id") int id, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Book book = bookService.findById((long)id);
         CurrentUser currentUser = SessionHelper.getCurrentUser(request);
         if(book == null){
             response.sendRedirect("/login");
@@ -46,29 +49,68 @@ public class BookController {
         return "book";
     }
 
-    @PostMapping("/book/{id}/addcomment")
-    public void newComment(@PathVariable("id") String bookId, @ModelAttribute("comment") Comment comment, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @GetMapping("/book/{id}/addcomment")
+    @ResponseBody
+    public String newComment(@PathVariable("id") String bookId, @RequestParam("message") String message , HttpServletRequest request, HttpServletResponse response) throws IOException {
         CurrentUser user = SessionHelper.getCurrentUser(request);
         if(user == null){
             response.sendRedirect("/index");
-            return;
+            return null;
         }
-        if(comment.getMessage().equals("")){
+        if(message == null || message.equals("")){
             response.sendRedirect("/book?id=" + bookId);
-            return;
+            return null;
         }
         Book book = bookService.findById(Long.parseLong(bookId));
         User currentUser = userService.findByUserId(user.getUserId());
 
         Comment comment1 = new Comment();
-        comment1.setMessage(comment.getMessage());
+        comment1.setMessage(message);
         comment1.setBook(book);
         comment1.setUser(currentUser);
 
         book.getComments().add(commentService.save(comment1));
 
         bookService.save(book);
-        response.sendRedirect("/book/" + bookId);
+        return currentUser.getFirstName() + " " + currentUser.getLastName() + "," + message;
+    }
+
+    @GetMapping("book/{id}/removefromlist")
+    @ResponseBody
+    public String removeFromList(@PathVariable("id") int id, HttpServletRequest request){
+        CurrentUser currentUser = SessionHelper.getCurrentUser(request);
+        if (currentUser == null) return "";
+        User user = userService.findByUserId(currentUser.getUserId());
+        Book book = bookService.findById((long) id);
+        BookList bookList = bookListService.findByUserAndBook(user,book);
+
+        bookList.getBooks().remove(book);
+        book.getBookLists().remove(bookList);
+
+        bookService.save(book);
+        bookListService.save(bookList);
+        return "";
+    }
+
+    @GetMapping("/book/{id}/getlistdata")
+    @ResponseBody
+    public String getListData(@PathVariable("id") int id, HttpServletRequest request){
+        CurrentUser currentUser = SessionHelper.getCurrentUser(request);
+        if(currentUser == null) return "";
+        User user = userService.findByUserId(currentUser.getUserId());
+        Book book = bookService.findById((long)id);
+        BookList bookList = bookListService.findByUserAndBook(user,book);
+        if (bookList == null)
+            return "";
+        switch (bookList.getReadingStatus()){
+            case READ:
+                return "read";
+            case READING:
+                return "reading";
+            case WANT_TO_READ:
+                return "willread";
+        }
+        return "";
     }
 
     @GetMapping("/book/{id}/addtolist")

@@ -66,12 +66,15 @@ public class ProfileController {
         switch (type.toUpperCase(Locale.ROOT)) {
             case "READ":
                 readingStatus = ReadingStatus.READ;
+                model.addAttribute("listname","READ");
                 break;
             case "READING":
                 readingStatus = ReadingStatus.READING;
+                model.addAttribute("listname","READING");
                 break;
             case "WILLREAD":
                 readingStatus = ReadingStatus.WANT_TO_READ;
+                model.addAttribute("listname","WILLREAD");
                 break;
             default:
                 readingStatus = null;

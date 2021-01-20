@@ -1,5 +1,6 @@
 package com.hashy.bookdb.services;
 
+import com.hashy.bookdb.domain.Book;
 import com.hashy.bookdb.domain.BookList;
 import com.hashy.bookdb.domain.ReadingStatus;
 import com.hashy.bookdb.domain.User;
@@ -30,5 +31,10 @@ public class BookListServiceImpl implements BookListService{
     @Override
     public Set<BookList> findByReadingStatus(ReadingStatus readingStatus) {
         return bookListRepository.findByReadingStatus(readingStatus);
+    }
+
+    @Override
+    public BookList findByUserAndBook(User user, Book book) {
+        return bookListRepository.findByUserAndBooks(user,book).orElse(null);
     }
 }

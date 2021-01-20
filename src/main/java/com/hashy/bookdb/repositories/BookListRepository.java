@@ -1,5 +1,6 @@
 package com.hashy.bookdb.repositories;
 
+import com.hashy.bookdb.domain.Book;
 import com.hashy.bookdb.domain.BookList;
 import com.hashy.bookdb.domain.ReadingStatus;
 import com.hashy.bookdb.domain.User;
@@ -12,4 +13,5 @@ public interface BookListRepository extends CrudRepository<BookList,Long> {
 
     Optional<BookList> findByUserAndReadingStatus(User user, ReadingStatus readingStatus);
     Set<BookList> findByReadingStatus(ReadingStatus readingStatus);
+    Optional<BookList> findByUserAndBooks(User user, Book book);
 }
