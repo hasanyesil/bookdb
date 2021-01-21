@@ -7,10 +7,7 @@ import com.hashy.bookdb.services.UserServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,6 +36,13 @@ public class UserController {
         }
         SessionHelper.setCurrentUser(request,user);
         return "redirect:index";
+    }
+
+    @RequestMapping("/logout")
+    @ResponseBody
+    public String logout(HttpServletRequest request){
+        request.getSession().invalidate();
+        return "ok";
     }
 
     @GetMapping("register")
